@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦃 Thanksgiving Week Schedule 🍂</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #d4745e 0%, #c45a3d 50%, #8b4513 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            border: 3px solid #8b4513;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            color: #fff9e6;
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+
+        .decoration {
+            font-size: 3em;
+            margin: 10px;
+        }
+
+        .controls {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+            border: 2px solid #ff8c42;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-all {
+            background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+            color: white;
+        }
+
+        .btn-kim {
+            background: linear-gradient(135deg, #ff6b35 0%, #f44336 100%);
+            color: white;
+        }
+
+        .btn-brian {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+        }
+
+        .filter-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .schedule-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+            border: 2px solid #8b4513;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #fff9e6;
+            transform: scale(1.01);
+        }
+
+        .row-kim {
+            background: #ffebe6;
+        }
+
+        .row-brian {
+            background: #e6f3ff;
+        }
+
+        .cancelled {
+            background: #ffe6e6 !important;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .changed {
+            background: #fff9c4 !important;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            text-align: center;
+            border: 2px solid #ff8c42;
+            min-width: 150px;
+        }
+
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .stat-card .label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .legend-box {
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+            border: 1px solid #666;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .filter-btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="decoration">🦃 🍂 🥧 🌽 🍁</div>
+            <h1>Thanksgiving Week Schedule</h1>
+            <div class="subtitle">November 18 - December 3, 2024</div>
+        </div>
+
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="number" id="totalShifts">0</div>
+                <div class="label">Total Shifts</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="activeShifts">0</div>
+                <div class="label">Active Shifts</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="cancelledShifts">0</div>
+                <div class="label">Cancelled</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="button-group">
+                <button class="filter-btn btn-all active" onclick="filterSchedule('all')">
+                    🍂 Show All
+                </button>
+                <button class="filter-btn btn-kim" onclick="filterSchedule('Kim')">
+                    🧡 Kim's Schedule
+                </button>
+                <button class="filter-btn btn-brian" onclick="filterSchedule('Brian')">
+                    💙 Brian's Schedule
+                </button>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box" style="background: #ffebe6;"></div>
+                <span>Kim's Shifts</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: #e6f3ff;"></div>
+                <span>Brian's Shifts</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: #fff9c4;"></div>
+                <span>Changed/Updated</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: #ffe6e6;"></div>
+                <span>Cancelled</span>
+            </div>
+        </div>
+
+        <div class="schedule-container">
+            <table id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>Who 👤</th>
+                        <th>Store 🏪</th>
+                        <th>When 📅</th>
+                        <th>Task 📋</th>
+                        <th>Pick Day 📦</th>
+                        <th>Delivery Day 🚚</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>🍁 Happy Thanksgiving! 🍁</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Stay organized and enjoy the holiday season! 🦃</p>
+        </div>
+    </div>
+
+    <script>
+        const scheduleData = [
+            { who: 'Kim', store: '23', when: 'Thursday 11/20', what: 'Work load/Write Order', pickDay: 'Thursday 11/20', deliveryDay: 'Friday 11/21', cancelled: false, changed: false },
+            { who: 'Kim', store: '23', when: 'Monday 11/24', what: 'Work load/Service', pickDay: '', deliveryDay: '', cancelled: false, changed: true },
+            { who: 'Kim', store: '23', when: 'Thursday 11/27', what: 'Shift Cancelled', pickDay: '', deliveryDay: '', cancelled: true, changed: true },
+            { who: 'Kim', store: '391', when: 'Thursday 11/20', what: 'Work load/Write Order', pickDay: 'Fri 11/21', deliveryDay: 'Mon 11/24', cancelled: false, changed: false },
+            { who: 'Kim', store: '391', when: 'Monday 11/24', what: 'Work load/Write Order', pickDay: 'Tue 11/25', deliveryDay: 'Wed 11/26', cancelled: false, changed: false },
+            { who: 'Kim', store: '391', when: 'Wed 11/26', what: 'WORK LOAD/WRITE ORDER', pickDay: 'Wed 11/26', deliveryDay: 'Mon 12/1', cancelled: false, changed: true },
+            { who: 'Kim', store: '658', when: 'Thur 11/20', what: 'WRITE ORDER/SERVICE', pickDay: 'Thur 11/20', deliveryDay: 'Fri 11/21', cancelled: false, changed: false },
+            { who: 'Kim', store: '658', when: 'Mon 11/24', what: 'WORK LOAD/WRITE ORDER', pickDay: 'Wed 11/26', deliveryDay: 'Sat 11/29', cancelled: false, changed: false },
+            { who: 'Kim', store: '658', when: 'Thursday 11/27', what: 'Shift Cancelled', pickDay: '', deliveryDay: '', cancelled: true, changed: true },
+            { who: 'Brian', store: '459', when: 'Thur 11/20', what: 'WORK LOAD/WRITE ORDER', pickDay: 'Tue 11/25', deliveryDay: 'Wed 11/26', cancelled: false, changed: false },
+            { who: 'Brian', store: '459', when: 'Wed 11/26', what: 'WORK LOAD/WRITE ORDER', pickDay: 'Tue 12/2', deliveryDay: 'Wed 12/3', cancelled: false, changed: true },
+            { who: 'Brian', store: '682', when: 'Tue 11/18', what: 'WORK LOAD/WRITE ORDER', pickDay: 'Wed 11/19', deliveryDay: 'Thur 11/20', cancelled: false, changed: false },
+            { who: 'Brian', store: '682', when: 'Fri 11/21', what: 'WORK LOAD/WRITE ORDER', pickDay: 'Fri 11/21', deliveryDay: 'Mon 11/24', cancelled: false, changed: false },
+            { who: 'Brian', store: '682', when: 'Tue 11/25', what: 'WORK LOAD/WRITE ORDER', pickDay: 'Wed 11/26', deliveryDay: 'Fri 11/28', cancelled: false, changed: false },
+            { who: 'Brian', store: '682', when: 'Fri 11/28', what: 'Shift Cancelled', pickDay: '', deliveryDay: '', cancelled: true, changed: true }
+        ];
+
+        let currentFilter = 'all';
+
+        function renderSchedule() {
+            const tbody = document.getElementById('scheduleBody');
+            tbody.innerHTML = '';
+
+            let totalShifts = 0;
+            let activeShifts = 0;
+            let cancelledShifts = 0;
+
+            scheduleData.forEach((shift, index) => {
+                if (currentFilter !== 'all' && shift.who !== currentFilter) {
+                    return;
+                }
+
+                totalShifts++;
+                if (shift.cancelled) {
+                    cancelledShifts++;
+                } else {
+                    activeShifts++;
+                }
+
+                const row = document.createElement('tr');
+                row.className = `row-${shift.who.toLowerCase()}`;
+                
+                if (shift.cancelled) {
+                    row.classList.add('cancelled');
+                } else if (shift.changed) {
+                    row.classList.add('changed');
+                }
+
+                row.innerHTML = `
+                    <td><strong>${shift.who}</strong></td>
+                    <td>${shift.store}</td>
+                    <td>${shift.when}</td>
+                    <td>${shift.what}</td>
+                    <td>${shift.pickDay}</td>
+                    <td>${shift.deliveryDay}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+
+            // Update stats
+            document.getElementById('totalShifts').textContent = totalShifts;
+            document.getElementById('activeShifts').textContent = activeShifts;
+            document.getElementById('cancelledShifts').textContent = cancelledShifts;
+        }
+
+        function filterSchedule(filter) {
+            currentFilter = filter;
+            
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            renderSchedule();
+        }
+
+        // Initial render
+        renderSchedule();
+    </script>
+</body>
+</html>
